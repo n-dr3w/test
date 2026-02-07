@@ -1,5 +1,3 @@
-"""Core scraping logic shared by CLI and Streamlit UI."""
-
 import json
 import random
 import sys
@@ -94,26 +92,13 @@ def format_salary(employment_types: List[Dict]) -> str:
 
 def fetch_justjoin_jobs(session: requests.Session) -> List[JobPosting]:
     jobs: List[JobPosting] = []
-    endpoints = [
-        "https://justjoin.it/api/offers",
-        "https://justjoin.it/api/offers?",  # fallback for edge caching
-        "https://justjoin.it/api/offers?language=en",
-    ]
-    payload = None
-    last_error: Optional[Exception] = None
-
-    for url in endpoints:
-        try:
-            response = session.get(url, timeout=30)
-            response.raise_for_status()
-            payload = response.json()
-            break
-        except (requests.RequestException, json.JSONDecodeError) as exc:
-            last_error = exc
-            continue
-
-    if payload is None:
-        print(f"[JustJoin] Failed to fetch: {last_error}", file=sys.stderr)
+    url = "https://justjoin.it/api/offers"
+    try:
+        response = session.get(url, timeout=30)
+        response.raise_for_status()
+        payload = response.json()
+    except (requests.RequestException, json.JSONDecodeError) as exc:
+        print(f"[JustJoin] Failed to fetch: {exc}", file=sys.stderr)
         return jobs
 
     for offer in payload:

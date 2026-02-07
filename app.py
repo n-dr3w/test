@@ -53,7 +53,7 @@ if run_button:
             status_placeholder.warning("No jobs found with the selected filters.")
         else:
             status_placeholder.success(f"Found {len(df)} jobs.")
-        results_placeholder.dataframe(df, width="stretch")
+        results_placeholder.dataframe(df, use_container_width=True)
 
         output = io.BytesIO()
         df.to_excel(output, index=False)
