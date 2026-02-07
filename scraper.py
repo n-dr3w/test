@@ -1,3 +1,5 @@
+"""Core scraping logic shared by CLI and Streamlit UI."""
+
 import json
 import random
 import sys
